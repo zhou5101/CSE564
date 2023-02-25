@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 1 -- Zhou Chen</title>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    <style>
+        svg {
+            background-color: lightgray;
+        }
+
+        .toggleContainer input[type=checkbox] {
+            height: 0;
+            width: 0;
+            visibility: hidden;
+        }
+
+        .toggleContainer label {
+            cursor: pointer;
+            text-indent: -9999px;
+            width: 60px;
+            height: 30px;
+            background: grey;
+            display: block;
+            border-radius: 100px;
+            position: relative;
+        }
+
+        .toggleContainer label:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggleContainer input:checked+label {
+            background: #bada55;
+        }
+
+        .toggleContainer input:checked+label:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
+
+        .line1 {
+            display: flex;
+            justify-content: center;
+        }
+
+        .dropbtn {
+            background-color: #1885F2;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 300px;
+            z-index: 1;
+        }
+
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content .inputContainer:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {
+            background-color: #025fbd;
+        }
+
+        .inputContainer {
+            color: black;
+            padding: 12px 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        fieldset {
+            width: 200px;
+            display: inline-block;
+
+        }
+
+        fieldset input[type=radio],
+        label {
+            cursor: pointer;
+        }
+
+        .scatter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            width: 60%;
+            margin: auto;
+        }
+
+        a:link,
+        a:visited {
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <h1><a href="https://www.kaggle.com/datasets/etsc9287/2020-general-election-polls">Election, COVID, and
+                Demographic Data by County</a></h1>
+        <h2>Bar/Histogram</h2>
+        <div class="line1">
+            <div class="dropdown">
+                <button class="dropbtn">Features Menu</button>
+                <div class="dropdown-content">
+                    <div class='inputContainer'>
+                        <input checked type="checkbox" class="check" name="check1" id="check1" data-chart="bar"
+                            data-feature="race" data-title="Race" onclick="menu(this)">
+                        <label class="layout" for="check1">Race</label>
+                    </div>
+
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check2" id="check2" data-chart="bar"
+                            data-feature="gender" data-title="Gender" onclick="menu(this)">
+                        <label class="layout" for="check2">Gender</label>
+                    </div>
+
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check3" id="check3" data-chart="bar"
+                            data-feature="transportation" data-title="transportation" onclick="menu(this)">
+                        <label class="layout" for="check3">Transportation</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check4" id="check4" data-chart="bar"
+                            data-feature="party" data-title="Plotical Party" onclick="menu(this)">
+                        <label class="layout" for="check4">Political Party</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check5" id="check5" data-chart="bar"
+                            data-feature="work" data-title="Work Types" onclick="menu(this)">
+                        <label class="layout" for="check5">Work Types</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check6" id="check6" data-chart="bar"
+                            data-feature="employed" data-title="Employed Status" onclick="menu(this)">
+                        <label class="layout" for="check6">Employed Status</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check7" id="check7" data-chart="histo"
+                            data-feature="total_votes" data-title="Total Votes" onclick="menu(this)">
+                        <label class="layout" for="check7">Total Votes</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check8" id="check8" data-chart="histo"
+                            data-feature="cases" data-title="Covid Cases" onclick="menu(this)">
+                        <label class="layout" for="check8">Covid Cases</label>
+                    </div>
+
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check9" id="check9" data-chart="histo"
+                            data-feature="deaths" data-title="Covid Deaths" onclick="menu(this)">
+                        <label class="layout" for="check9">Covid Deaths</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check10" id="check10" data-chart="histo"
+                            data-feature="TotalPop" data-title="Total Population" onclick="menu(this)">
+                        <label class="layout" for="check10">Total Population</label>
+                    </div>
+
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check11" id="check11" data-chart="histo"
+                            data-feature="Income" data-title="Income" onclick="menu(this)">
+                        <label class="layout" for="check11">Income</label>
+                    </div>
+                    <div class='inputContainer'>
+                        <input checked type="checkbox" class="check" name="check12" id="check12" data-chart="histo"
+                            data-feature="MeanCommute" data-title="Mean Commute Time" onclick="menu(this)">
+                        <label class="layout" for="check12">Mean Commute Time</label>
+                    </div>
+
+                    <div class='inputContainer'>
+                        <input type="checkbox" class="check" name="check13" id="check13" data-chart="histo"
+                            data-feature="Poverty" data-title="Percentage Under Poverty Level" onclick="menu(this)">
+                        <label class="layout" for="check13">Poverty Rate</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id='chart1'>
+            </div>
+            <div id='chart2'>
+            </div>
+
+            <div class="toggleContainer">
+                <input type="checkbox" id="switch" onclick="toggleHor()" /><label for="switch">Toggle</label>
+            </div>
+        </div>
+
+        <h2>Scatter Plot</h2>
+        <div class="scatter">
+            <div class="scatter-btn-container">
+                <fieldset>
+                    <legend>Scatter X-axis</legend>
+                    <input onclick="getScatterX(this.value, 'cate')" type="radio" name="x-axis" id="race1"
+                        value="race" /><label for="race1">Race</label><br />
+                    <input onclick="getScatterX(this.value, 'cate')" type="radio" name="x-axis" id="gender1"
+                        value="gender" /><label for="gender1">Gender</label><br />
+                    <input onclick="getScatterX(this.value, 'cate')" type="radio" name="x-axis" id="transportation1"
+                        value="transportation" /><label for="transportation1">Transportation</label><br />
+                    <input onclick="getScatterX(this.value, 'cate')" type="radio" name="x-axis" id="party1"
+                        value="party" /><label for="party1">Political Party</label><br />
+                    <input onclick="getScatterX(this.value, 'cate')" type="radio" name="x-axis" id="work1"
+                        value="work" /><label for="work1">Work Types</label><br />
+                    <input onclick="getScatterX(this.value, 'cate')" type="radio" name="x-axis" id="employed1"
+                        value="employed" /><label for="employed1">Employ Status</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="total_votes1"
+                        value="total_votes" /><label for="total_votes1">Total Votes</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="TotalPop1"
+                        value="TotalPop" /><label for="TotalPop1">Total Population</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="cases1"
+                        value="cases" /><label for="cases1">Covids Cases</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="deaths1"
+                        value="deaths" /><label for="deaths1">Covid Deaths</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="income1"
+                        value="Income" checked /><label for="income1">Median House Income</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="Poverty1"
+                        value="Poverty" /><label for="Poverty1">Poverty Rate</label><br />
+                    <input onclick="getScatterX(this.value, 'num')" type="radio" name="x-axis" id="MeanCommute1"
+                        value="MeanCommute" /><label for="MeanCommute1">Mean Time Commute</label><br />
+                </fieldset>
+                <fieldset>
+                    <legend>Scatter Y-axis</legend>
+                    <input onclick="getScatterY(this.value, 'cate')" type="radio" name="y-axis" id="race2"
+                        value="race" /><label for="race2">Race</label><br />
+                    <input onclick="getScatterY(this.value, 'cate')" type="radio" name="y-axis" id="gender2"
+                        value="gender" /><label for="gender2">Gender</label><br />
+                    <input onclick="getScatterY(this.value, 'cate')" type="radio" name="y-axis" id="transportation2"
+                        value="transportation" /><label for="transportation2">Transportation</label><br />
+                    <input onclick="getScatterY(this.value, 'cate')" type="radio" name="y-axis" id="party2"
+                        value="party" /><label for="party2">Political Party</label><br />
+                    <input onclick="getScatterY(this.value, 'cate')" type="radio" name="y-axis" id="work2"
+                        value="work" /><label for="work2">Work Types</label><br />
+                    <input onclick="getScatterY(this.value, 'cate')" type="radio" name="y-axis" id="employed2"
+                        value="employed" /><label for="employed2">Employ Status</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="total_votes2"
+                        value="total_votes" /><label for="total_votes2">TotalVotes</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="TotalPop2"
+                        value="TotalPop" /><label for="TotalPop2">Total Population</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="cases2"
+                        value="cases" /><label for="cases2">Covids Cases</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="deaths2"
+                        value="deaths" /><label for="deaths2">Covid Deaths</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="income2"
+                        value="Income" /><label for="income2">Median House Income</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="Poverty2"
+                        value="Poverty" checked /><label for="Poverty2">Poverty Rate</label><br />
+                    <input onclick="getScatterY(this.value, 'num')" type="radio" name="y-axis" id="MeanCommute2"
+                        value="MeanCommute" /><label for="MeanCommute2">Mean Time Commute</label><br />
+                </fieldset>
+            </div>
+            <div id='chart3'>
+            </div>
+        </div>
+    </div>
+    <!-- <script type ="module" src="./js/app.js"></script> -->
+    <script src="./js/app.js"></script>
+
+</body>
+
+</html>
