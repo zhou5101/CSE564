@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 2a -- PCA Analysis</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
+
 <body>
     <nav>
         <a href="https://archive.ics.uci.edu/ml/datasets/Wine+Quality">
             <span>Lab 2a - Wine Quality</span>
         </a>
         <ul>
-            <li><a class = "navbar active-btn" onclick="openTask(event, 1)">Scree Plot and PCA-based biplot</a></li>
+            <li><a class="navbar active-btn" onclick="openTask(event, 1)">Scree Plot and PCA-based biplot</a></li>
             <li><a class="navbar" onclick="openTask(event, 2)">Scatterplot Matrix</a></li>
             <li><a class="navbar" onclick="openTask(event, 3)">K-means Clusters</a></li>
         </ul>
@@ -21,20 +24,34 @@
 
     <section class="wrapper ">
         <div class="container1 tab active-tab">
-            <span>Tab 1</span>
+            <div id="slider">
+            </div>
+            
+            <div id="scree">
+            </div>
+
+            <div id="biplot">
+            </div>
         </div>
 
         <div class="tab">
             <div class="container2">
-                <div class="grid a">123</div>
+                <div class="grid a"><span>feature 1</span></div>
                 <div class="grid b">123</div>
                 <div class="grid c">123</div>
                 <div class="grid d">123</div>
                 <div class="grid e">123</div>
-                <div class="grid f">123</div>
+                <div class="grid f"><span>feature 2</span></div>
                 <div class="grid g">123</div>
                 <div class="grid h">123</div>
                 <div class="grid i">123</div>
+                <div class="grid j">123</div>
+                <div class="grid k"><span>feature 3</span></div>
+                <div class="grid l">123</div>
+                <div class="grid m">123</div>
+                <div class="grid n">123</div>
+                <div class="grid o">123</div>
+                <div class="grid p"><span>feature 4</span></div>
             </div>
         </div>
 
@@ -44,6 +61,8 @@
 
     </section>
 
-    <script src="./app.js"></script>
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+    <script src="{{url_for('static', filename='scree_plot.js')}}"></script>
 </body>
+
 </html>
