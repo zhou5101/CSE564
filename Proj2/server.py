@@ -3,15 +3,32 @@ import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.cluster import KMeans
 
 app = Flask(__name__)
 
 df = pd.read_csv('./data/winequality-red.csv', sep=';', header=0)
-std = StandardScaler().fit_transform(df)
-pca = PCA().fit(std)
+std = StandardScaler().fit_transform(df.iloc[:, 0:-1])
+pcaModel = PCA()
+pca = pcaModel.fit_transform(std)
+
 eigen_vals = pd.DataFrame(
-    {'FeatureName': df.columns, 'EigenValue': pca.explained_variance_})
+    {'Eigenval': pcaModel.explained_variance_ratio_*100, 'Feature': df.columns.values[:-1]})
+eigen_ratios = pd.DataFrame(
+    {'EigenRatio': np.cumsum(pcaModel.explained_variance_ratio_ * 100), 'Feature': df.columns.values[:-1]})
+
+pca_wine = pd.DataFrame(
+    data=pca, columns=[f'PC{i}' for i in range(1, len(df.columns))])
+
+coeff = np.transpose(pcaModel.components_[0:2, :])
+pca2D = pca_wine[['PC1', 'PC2']]
+loadings = pd.DataFrame(data=coeff, columns=['x', 'y'])
+featureName = pd.DataFrame({'feature': df.columns.values[:-1]})
+
+sov = pd.DataFrame(data=pcaModel.components_, columns=[
+                   f'PC{i}' for i in range(1, len(df.columns))])
+sov['feature'] = df.columns.values[:-1]
+sov = sov.iloc[:, [i for i in range(-1, len(df.columns)-1)]]
 
 
 @app.route('/')
@@ -19,14 +36,60 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/temp')
-def temp():
-    return render_template('temp.html')
+@app.route('/eigenvalue')
+def eigenvalue():
+    return jsonify(
+        eigen_vals=eigen_vals.to_json(orient="records"),
+        eigen_ratios=eigen_ratios.to_json(orient='records'),
+    )
 
 
-@app.route('/PCA')
-def PCA():
-    return eigen_vals.to_json(orient="records")
+@app.route('/biplot')
+def biplot():
+    return jsonify(
+        pca=pca2D.to_json(orient='records'),
+        loadings=loadings.to_json(orient='records'),
+        feature=featureName.to_json(orient='records')
+    )
+
+
+@app.route('/SumSquareLoadings/<int:i>')
+def SumSquareLoadings(i):
+    # print('SumSquareLoadings')
+    ssdf = sov.iloc[:, :i+1]
+    ssdf['Sum of squared Loadings'] = ssdf.iloc[:, 1:].pow(
+        2).sum(axis=1).pow(0.5)
+
+    tableDF = ssdf.sort_values(by=['Sum of squared Loadings'], ascending=False)
+    tableDF = tableDF.iloc[:4, :]
+    scatterDF = df.loc[:, tableDF['feature'].values]
+    # print(tableDF)
+    return jsonify(
+        table=tableDF.to_json(orient='records'),
+        scatter=scatterDF.to_json(orient='records')
+    )
+
+
+@app.route('/elbow')
+def elbow():
+    target = df['quality']
+    data = df.iloc[:, :-1]
+    distortions = []
+    K = range(1, 11)
+    for k in K:
+        kmeanModel = KMeans(n_clusters=k)
+        kmeanModel.fit(data)
+        distortions.append(kmeanModel.inertia_)
+    return jsonify(distortions)
+
+
+@app.route('/cluster')
+def cluster():
+    data = df.iloc[:, :-1]
+    kmeanModel = KMeans(n_clusters=4)
+    kmeanModel.fit(data)
+    pca2D['cluster'] = kmeanModel.predict(data)
+    return pca2D.to_json(orient='records')
 
 
 if __name__ == '__main__':

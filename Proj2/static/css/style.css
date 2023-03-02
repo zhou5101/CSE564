@@ -45,7 +45,7 @@ a>span {
 
 .wrapper {
     margin: 0 auto;
-    width: 65%;
+    width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,10 +68,9 @@ a>span {
 }
 
 .grid {
-    background-color: #444;
-    color: #fff;
+    /* background-color: #444; */
+    color: black;
     border-radius: 5px;
-    padding: 20px;
     font-size: 150%;
 }
 
@@ -83,14 +82,17 @@ a>span {
     display: block;
 }
 
-.container2 span {
-    width: 300px;
-    height: 300px;
+.container2 p {
+    width: 325px;
+    height: 325px;
     display: inline-grid;
     align-items: center;
     text-align: center;
+    font-size: 30px;
 }
-
+svg{
+    overflow: visible;
+}
 div.tooltip {
     position: absolute;
     text-align: center;
@@ -100,4 +102,32 @@ div.tooltip {
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+}
+
+.d-index {
+    display: inline-block;
+    margin-top: 30px;
+    /* margin-top: 25px; */
+    margin-bottom: 40px;
+    /* margin-left: 40px; */
+}
+svg{
+    margin-top: 40px;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    margin: 40px auto;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }
