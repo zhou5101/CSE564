@@ -28,7 +28,7 @@ function scatterPlot(id, data, x, y){
         .attr("cx", d => xScale(+d[x]))
         .attr("cy", d => yScale(+d[y]))
         .attr("r", 3)
-        .style("fill", "#69b3a2");
+        .style("fill", (d, i) =>{ return colorScale(clusterNo[i]); });
 
     svg.append("g")
         .attr("transform", `translate(0, ${height})`)
@@ -91,8 +91,6 @@ function createScatter(data){
     d3.selectAll('.diagonal')
         .html( (d,i)=> `<p>${names[i]}</p>`);
     
-    
-
     const diag = ['a', 'f', 'k', 'p']
     const row =[['b', 'c', 'd'],
     ['e', 'g', 'h'],
@@ -118,3 +116,36 @@ function createScatter(data){
 }
 
 updateTask2();
+
+
+const legendCont=d3.select('#legend-container')
+    .append("svg")
+    .style("width", 100 + 'px')
+    .style("height", 70 + 'px')
+    .append("g");
+
+
+legendCont.append("rect")
+    .attr("width", 100)
+    .attr("height", 70)
+    .style("fill", "#ffffff")
+    .style("stroke", "#000000")
+    .style("margin", "0")
+    .style("display", "inline-block");
+
+const legendItems = legendCont.selectAll(".legend-item")
+    .data(categories)
+    .enter().append("g")
+      .attr("class", "legend-item")
+      .attr("transform", function(d, i) { return "translate(10," + (20 * i+10) + ")"; });
+
+legendItems.append("circle")
+    .attr("cx", 5)
+    .attr("cy", 5)
+    .attr("r", 5)
+    .style("fill", function(d, i) { return colorScale(i); });
+
+legendItems.append("text")
+    .attr("x", 15)
+    .attr("y", 9)
+    .text(function(d, i) { return categories[i]; });

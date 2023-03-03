@@ -50,7 +50,7 @@ function screePlot(id, data){
         .attr("r", 3)
         .attr("cx", function (d, i) { return x(i+1); })
         .attr("cy", function (d) { return y(d); })
-        .attr("fill", function(d,i){ return i==3?"red":"royalblue";});
+        .attr("fill", function(d,i){ return i==2?"red":"royalblue";});
 
     svg.append("line")
         .attr('x1', x(1))
@@ -63,10 +63,10 @@ function screePlot(id, data){
         .attr("stroke-width", 2);
 
     svg.append("line")
-        .attr('x1', x(4))
-        .attr('y1', y(data[3]))
-        .attr('x2', x(6.1))
-        .attr('y2', y(859000))
+        .attr('x1', x(3))
+        .attr('y1', y(data[2]))
+        .attr('x2', x(5.3))
+        .attr('y2', y(1091000))
         .attr("fill", "none")
         .attr("stroke", "red")
         .attr("stroke-dasharray", "5,5")
@@ -107,7 +107,6 @@ fetch(cluster).then(res => res.json())
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
         svg.selectAll(".data-point")
             .data(data)
@@ -118,6 +117,8 @@ fetch(cluster).then(res => res.json())
             .attr("r", 3)
             .style("fill", function(d) { return colorScale(d.cluster); });
 
-        addChartLabels(svg, "PC1", 'PC2', 'K-Mean Clutering')
+        addChartLabels(svg, "PC1", 'PC2', 'K-Mean Clutering');
+        addLegend(svg);
+
     }
 )

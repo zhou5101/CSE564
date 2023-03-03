@@ -30,6 +30,10 @@ sov = pd.DataFrame(data=pcaModel.components_, columns=[
 sov['feature'] = df.columns.values[:-1]
 sov = sov.iloc[:, [i for i in range(-1, len(df.columns)-1)]]
 
+data = df.iloc[:, :-1]
+kmeanModel1 = KMeans(n_clusters=3)
+kmeanModel1.fit(data)
+
 
 @app.route('/')
 def index():
@@ -72,8 +76,6 @@ def SumSquareLoadings(i):
 
 @app.route('/elbow')
 def elbow():
-    target = df['quality']
-    data = df.iloc[:, :-1]
     distortions = []
     K = range(1, 11)
     for k in K:
@@ -85,11 +87,15 @@ def elbow():
 
 @app.route('/cluster')
 def cluster():
-    data = df.iloc[:, :-1]
-    kmeanModel = KMeans(n_clusters=4)
-    kmeanModel.fit(data)
-    pca2D['cluster'] = kmeanModel.predict(data)
+
+    pca2D['cluster'] = kmeanModel1.predict(data)
     return pca2D.to_json(orient='records')
+
+
+@app.route('/clusterNo')
+def clusterNo():
+
+    return jsonify(kmeanModel1.predict(data).tolist())
 
 
 if __name__ == '__main__':

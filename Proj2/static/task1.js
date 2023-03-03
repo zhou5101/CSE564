@@ -159,7 +159,9 @@ fetch(biplotUrl).then(response=>response.json())
         .attr("cx", d => xScale(d.PC1*scaleX))
         .attr("cy", d => yScale(d.PC2*scaleY))
         .attr("r", 3)
-        .style("fill", "#69b3a2");
+        .style("fill", (d, i) =>{ return colorScale(clusterNo[i]); });
+
+
     originX = xScale(0);
     originY = yScale(0);
     svg.selectAll("line")
@@ -172,7 +174,7 @@ fetch(biplotUrl).then(response=>response.json())
         .attr("x2", d=> xScale(0)+width*d.x*0.6)
         .attr("y2", d=> yScale(0)+height*d.y*0.6)
         .attr("stroke-width", 2)
-        .attr("stroke", "royalblue");
+        .attr("stroke", "black");
         // .attr("marker-end", "url(#arrowhead)");
 
     svg.selectAll("text")
@@ -189,10 +191,10 @@ fetch(biplotUrl).then(response=>response.json())
         .call(xAxis);
 
     svg.append("g")
-        // .attr("transform", `translate(${width}, 0)`)
         .call(yAxis);
 
     addChartLabels(svg, 'PC1', 'PC2', 'Biplot of Red Wine PCA');
+    addLegend(svg);
 })
 
 function updateBiplot(){
@@ -219,7 +221,7 @@ function updateBiplot(){
                     .attr("x2", d=> originX+(width*ele.x)*0.6)
                     .attr("y2", d=> originY+(height*ele.y)*0.6)
                     .attr("stroke-width", 2)
-                    .attr("stroke", "royalblue");
+                    .attr("stroke", "black");
                 
                 plot.append('text')      
                     .attr("class", "biplot-label")
