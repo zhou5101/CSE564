@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2b</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <a href="https://archive.ics.uci.edu/ml/datasets/Wine+Quality">
+            <span>Lab 2b - Wine Quality</span>
+        </a>
+        <ul>
+            <li><a class="navbar active-btn" onclick="openTask(event, 0)">MDS Plots</a></li>
+            <li><a class="navbar" onclick="openTask(event, 1)">Parallel Coordinates Plot (PCP)</a></li>
+            <li><a class="navbar" onclick="openTask(event, 2)">PCP axes ordering</a></li>
+        </ul>
+    </nav>
+        
+    <section class="wrapper ">
+        <div class="container1 tab active-tab">
+           
+        </div>
+
+
+        <div class="container2 tab">
+            
+        </div>
+
+        <div class="container3 tab">
+            <div id="k-mean-elbow" style="margin-top: 40px;"></div>
+            <div id="k-mean-cluster" style="margin-top: 40px;"></div>
+        </div>
+
+    </section>
+
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+    <!-- <script src="{{url_for('static', filename='task1.js')}}"></script>
+    <script src="{{url_for('static', filename='task2.js')}}"></script>
+    <script src="{{url_for('static', filename='task3.js')}}"></script> -->
+</body>
+
+</html>
