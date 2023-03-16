@@ -68,6 +68,7 @@ a>span {
 
 svg{
     overflow: visible;
+    margin-top: 20px;
 }
 div.tooltip {
     position: absolute;
