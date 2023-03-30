@@ -8,10 +8,10 @@ var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 var categories = ['cluster 1', 'cluster 2', 'cluster 3'];
 
 let clusterNoURL = `${SCRIPT_ROOT}/clusterNo`;
-let featureURL = `${SCRIPT_ROOT}/feature_list`;
 let DataURL = `${SCRIPT_ROOT}/data`;
 
-var clusterNo =[], features=null, wine_data = null;
+var clusterNo =[], features=['fixed acidity','volatile acidity','citric acid','residual sugar','chlorides','free sulfur dioxide','total sulfur dioxide','density','pH','sulphates','alcohol'];
+var selectedFeature = [];
 
 async function fetchData(URL) {
   const response = await fetch(URL);
@@ -26,15 +26,25 @@ async function storeData(URL) {
 }
 
 function openTask(evt, idx) {
-    const navbar = document.getElementsByClassName("navbar");
-    const content = document.getElementsByClassName("tab");
+  const navbar = document.getElementsByClassName("navbar");
+  const content = document.getElementsByClassName("tab");
 
-    navbar[prevTabIdx].classList.toggle("active-btn")
-    content[prevTabIdx].classList.toggle("active-tab")
-    navbar[idx].classList.toggle("active-btn")
-    content[idx].classList.toggle("active-tab")
+  navbar[prevTabIdx].classList.toggle("active-btn")
+  content[prevTabIdx].classList.toggle("active-tab")
+  navbar[idx].classList.toggle("active-btn")
+  content[idx].classList.toggle("active-tab")
 
-    prevTabIdx = idx;
+  prevTabIdx = idx;
+  if(idx===0){
+    selectedFeature = [];
+  }else if (idx ===2){
+    fetch(DataURL).then(res=>res.json()).then(
+    data=>{
+        // console.log(data, selectedFeature);
+        PCP("#pcp-2", data, selectedFeature);
+    }
+)
+  }
 }
 
 function addChartLabels(container, xLabel, yLabel, title){
@@ -98,21 +108,9 @@ function addLegend(svg) {
     .text(function(d, i) { return categories[i]; });
 }
 
-storeData(DataURL).then(
-  (data) => {
-    wine_data=data;
-    console.log(data);
-  });
 storeData(clusterNoURL).then(
   (data) =>{
     clusterNo = data;
-    console.log(data);
+    // console.log(data);
   }
 );
-storeData(featureURL).then(
-  (data) => {
-    features = data;
-    console.log(data);
-  }
-);
-

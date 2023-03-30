@@ -1,4 +1,4 @@
-console.log("task 1");
+// console.log("task 1");
 let mdsURL = `${SCRIPT_ROOT}/mds`;
 let mdsCorrURL = `${SCRIPT_ROOT}/mds_corr`;
 
@@ -27,7 +27,7 @@ fetch(mdsURL).then(res => res.json())
             .range([ height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
-
+        // console.log("task1", y);
         // Add dots
         svg.append('g')
             .selectAll("dot")
@@ -86,25 +86,25 @@ fetch(mdsCorrURL).then(res => res.json())
             .on('click', function (evt, d){
                 let index = evt.target.getAttribute('index');
                 let name = evt.target.getAttribute('name');
-                console.log(index);
-                if(clickedFeature.length==features.length)
-                    clickedFeature.shift();
+                // console.log(index);
+                if(selectedFeature.length==features.length)
+                    selectedFeature.shift();
 
                 if(index){
                     d3.select(this).attr('index', null);
                     d3.select(this).text(name);
-                    clickedFeature.pop();
+                    selectedFeature.pop();
                     i--;
                 }else{
-                    clickedFeature.push(name);
-                // console.log(clickedFeature);
+                    selectedFeature.push(name);
                     d3.select(this).attr('index', i);
                     d3.select(this).text(`${name}: ${i+1}`);
                     i++;
                     if(i==features.length)
-                        i=0;
+                    i=0;
                 }
                 
+                console.log(selectedFeature);
             });
 
 

@@ -80,3 +80,8 @@ div.tooltip {
     border-radius: 8px;
     pointer-events: none;
 }
+
+.container1 {
+    width: 700px;
+    overflow: visible;
+}

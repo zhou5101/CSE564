@@ -4,7 +4,6 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.cluster import KMeans
 from sklearn.manifold import MDS
-from matplotlib import pyplot as plt
 
 app = Flask(__name__)
 
@@ -24,16 +23,15 @@ corre_matrix = 1-data.corr().abs()
 MDS_corr = MDS(n_components=2, dissimilarity='precomputed', random_state=0)
 corr_transform = MDS_corr.fit_transform(corre_matrix)
 
+# corre_matrix = 1-data.corr().abs()
+# MDS_corr = MDS(n_components=2, dissimilarity='precomputed', random_state=0)
+# corr_transform = MDS_corr.fit_transform(corre_matrix)
+
+data.reset_index(drop=True, inplace=True)
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-corre_matrix = 1-data.corr().abs()
-MDS_corr = MDS(n_components=2, dissimilarity='precomputed', random_state=0)
-corr_transform = MDS_corr.fit_transform(corre_matrix)
-
 
 @app.route('/clusterNo')
 def clusterNo():
@@ -42,7 +40,7 @@ def clusterNo():
 
 @app.route('/data')
 def wine_data():
-    return data.to_json(orient='records')
+    return pd.concat([data, pd.DataFrame(clusterID,columns=["ID"])], axis=1).to_json(orient='records')
 
 
 @app.route('/feature_list')
